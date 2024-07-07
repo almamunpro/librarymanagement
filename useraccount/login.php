@@ -7,9 +7,16 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="index">
-    <div class="background">
-        <form action="login_process.php" method="POST">
+    <div >
+        <form action="login_process.php" method="post">
             <h2>Login</h2>
+            <?php
+            session_start();
+            if (isset($_SESSION['error_message'])) {
+                echo '<div class="error_message">' . htmlspecialchars($_SESSION['error_message']) . '</div>';
+                unset($_SESSION['error_message']);
+            }
+            ?>
             <input type="text" name="username" placeholder="Username" required>
             <input type="password" name="password" placeholder="Password" required>
             <input type="submit" value="Login">
