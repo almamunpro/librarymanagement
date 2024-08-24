@@ -1,13 +1,10 @@
 .index{  
     font-family: Arial, sans-serif;
     display: flex;
-    flex-direction: column;
     background-image: url('bg_images/library-background-zp3y3gk7am2pnsar.jpg');
     background-size: auto;
     justify-content: center;
-    align-items: center;  
     background-repeat: no-repeat;
-    margin: auto;
     
 }
 
@@ -601,6 +598,9 @@ img {vertical-align: middle;}
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+.paymentContainer form{
+    margin-top: -1%;
 }
 
 .book p {

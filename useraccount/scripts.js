@@ -1,68 +1,93 @@
+// Function to add an item to the cart
 function addToCart(title, imgSrc) {
-    let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
-    cart.push({ title: title, imgSrc: imgSrc });
-    sessionStorage.setItem('cart', JSON.stringify(cart));
+    let cart = JSON.parse(sessionStorage.getItem('cartItems')) || [];
+    cart.push({ title: title, imgSrc: imgSrc, rentalDays: 1 }); // Default rentalDays to 1
+    sessionStorage.setItem('cartItems', JSON.stringify(cart));
     showModal('The book "' + title + '" has been added to your cart.');
 }
 
-function buyNow(title, imgSrc) {
-    addToCart(title, imgSrc);
-    window.location.href = 'checkout.php';
+
+// Function to display cart items on checkout page
+function displayCartItems() {
+    const cartContainer = document.getElementById('cartContainer');
+    const cartItems = JSON.parse(sessionStorage.getItem('cartItems')) || [];
+
+    cartContainer.innerHTML = ''; // Clear previous items
+
+    cartItems.forEach((item, index) => {
+        const cartItem = document.createElement('div');
+        cartItem.className = 'cart-item';
+
+        cartItem.innerHTML = `
+            <img src="${item.imgSrc}" alt="${item.title}" class="cart-item-image">
+            <div class="cart-item-details">
+                <p class="book-title">${item.title}</p>
+                <label for="rentalDays${index}">Rental Days:</label>
+                <select id="rentalDays${index}" class="rentalDays" onchange="updateRentalDays(${index}, this.value)">
+                    ${generateRentalDaysOptions(item.rentalDays)}
+                </select>
+                <button class="delete-button" onclick="removeCartItem(${index})">Remove</button>
+            </div>
+        `;
+
+        cartContainer.appendChild(cartItem);
+    });
+
+    calculateTotal(); // Calculate total after displaying items
 }
 
+// Function to generate rental days options for select dropdown
+function generateRentalDaysOptions(selectedDays) {
+    let options = '';
+    for (let i = 1; i <= 30; i++) {
+        if (i === selectedDays) {
+            options += `<option value="${i}" selected>${i} day(s)</option>`;
+        } else {
+            options += `<option value="${i}">${i} day(s)</option>`;
+        }
+    }
+    return options;
+}
+
+// Function to update rental days for a specific cart item
+function updateRentalDays(index, days) {
+    let cartItems = JSON.parse(sessionStorage.getItem('cartItems')) || [];
+    cartItems[index].rentalDays = parseInt(days);
+    sessionStorage.setItem('cartItems', JSON.stringify(cartItems));
+    calculateTotal(); // Recalculate total after updating rental days
+}
+
+// Function to calculate total amount
 function calculateTotal() {
     let total = 0;
-    let checkboxes = document.querySelectorAll('.cart-item-checkbox');
+    const cartItems = JSON.parse(sessionStorage.getItem('cartItems')) || [];
 
-    if (checkboxes.length === 0 || checkboxes[0].style.display === 'none') {
-        // If no checkboxes are visible, calculate total for all items
-        document.querySelectorAll('.cart-item').forEach(function(cartItem) {
-            let rentalDays = parseInt(cartItem.querySelector('.rentalDays').value);
-            total += rentalDays * 10; // Assuming $10 per day
-        });
-    } else {
-        // Calculate total only for checked items
-        checkboxes.forEach(function(checkbox, index) {
-            if (checkbox.checked) {
-                let rentalDays = parseInt(checkbox.nextElementSibling.nextElementSibling.nextElementSibling.value);
-                total += rentalDays * 10; // Assuming $10 per day
-            }
-        });
-    }
+    cartItems.forEach(item => {
+        total += item.rentalDays * 10; // Assuming $10 per day
+    });
 
     let totalAmountContainer = document.getElementById('totalAmountContainer');
-    totalAmountContainer.textContent = 'Total Amount: $' + total;
     totalAmountContainer.style.display = 'block';
+    document.getElementById('totalAmount').innerText = total;
+    document.getElementById('totalAmountHidden').value = total;
+
+    sessionStorage.setItem('totalAmount', total); // Store total amount in sessionStorage
 }
 
-function showModal(message) {
-    let modal = document.getElementById('modal');
-    let modalMessage = document.getElementById('modal-message');
-    modalMessage.textContent = message;
-    modal.style.display = 'block';
+
+// Function to remove a cart item
+function removeCartItem(index) {
+    let cartItems = JSON.parse(sessionStorage.getItem('cartItems')) || [];
+    cartItems.splice(index, 1);
+    sessionStorage.setItem('cartItems', JSON.stringify(cartItems));
+    displayCartItems(); // Refresh cart display after removal
 }
 
-function closeModal() {
-    let modal = document.getElementById('modal');
-    modal.style.display = 'none';
-}
-
-window.onload = function() {
-    if (document.getElementById('cartContainer')) {
-        displayCart();
-    }
-};
-
-function deleteCartItem(index) {
-    let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
-    cart.splice(index, 1);
-    sessionStorage.setItem('cart', JSON.stringify(cart));
-    displayCart();
-}
-
+// Function to toggle checkboxes for marking items
 function toggleCheckboxes() {
     let checkboxes = document.querySelectorAll('.cart-item-checkbox');
     let markItemsButton = document.getElementById('markItemsButton');
+
     if (checkboxes[0].style.display === 'none' || checkboxes[0].style.display === '') {
         checkboxes.forEach(function(checkbox) {
             checkbox.style.display = 'block';
@@ -77,53 +102,25 @@ function toggleCheckboxes() {
     }
 }
 
-function displayCart() {
-    let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
-    let cartContainer = document.getElementById('cartContainer');
-    cartContainer.innerHTML = '';
-
-    cart.forEach(function(item, index) {
-        let cartItem = document.createElement('div');
-        cartItem.classList.add('cart-item');
-
-        let checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.classList.add('cart-item-checkbox');
-        checkbox.style.display = 'none'; // Hide initially
-        cartItem.appendChild(checkbox);
-
-        let img = document.createElement('img');
-        img.src = item.imgSrc;
-        img.alt = item.title;
-        img.classList.add('book-img');
-        cartItem.appendChild(img);
-
-        let title = document.createElement('p');
-        title.textContent = (index + 1) + '. ' + item.title;
-        title.classList.add('book-title');
-        cartItem.appendChild(title);
-
-        let rentalDaysSelect = document.createElement('select');
-        rentalDaysSelect.classList.add('rentalDays');
-        for (let i = 1; i <= 30; i++) {
-            let option = document.createElement('option');
-            option.value = i;
-            option.textContent = i + ' day(s)';
-            rentalDaysSelect.appendChild(option);
-        }
-        cartItem.appendChild(rentalDaysSelect);
-
-        let deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Delete';
-        deleteButton.onclick = function() {
-            deleteCartItem(index);
-        };
-        deleteButton.style.float = 'right'; // Align the delete button to the right
-        cartItem.appendChild(deleteButton);
-
-        cartContainer.appendChild(cartItem);
-    });
+// Function to show a modal with a message
+function showModal(message) {
+    let modal = document.getElementById('modal');
+    let modalMessage = document.getElementById('modal-message');
+    modalMessage.textContent = message;
+    modal.style.display = 'block';
 }
+
+// Function to close the modal
+function closeModal() {
+    let modal = document.getElementById('modal');
+    modal.style.display = 'none';
+}
+
+// Initialize cart display when the page loads
+document.addEventListener("DOMContentLoaded", function() {
+    displayCartItems();
+});
+
 //slideshow
 
 let slideIndex = 0;
@@ -146,32 +143,3 @@ function showSlides() {
   setTimeout(showSlides, 2000); // Change image every 2 seconds
 }
 
-// Assuming we have an array to keep track of stock
-let bookStock = {
-    1: 10 // Example book ID and its stock
-};
-
-function updateStock(bookId) {
-    if (bookStock[bookId] > 0) {
-        bookStock[bookId]--;
-        document.getElementById(`stock-${bookId}`).innerText = bookStock[bookId];
-    } else {
-        alert("Out of stock!");
-    }
-}
-
-function addToCart(title, imgSrc, bookId) {
-    let cartItems = JSON.parse(sessionStorage.getItem('cartItems')) || [];
-    cartItems.push({ title, imgSrc, bookId });
-    sessionStorage.setItem('cartItems', JSON.stringify(cartItems));
-    updateStock(bookId); // Decrease the stock
-    showModal("Item added to cart");
-}
-
-function buyNow(title, imgSrc, bookId) {
-    let cartItems = JSON.parse(sessionStorage.getItem('cartItems')) || [];
-    cartItems.push({ title, imgSrc, bookId });
-    sessionStorage.setItem('cartItems', JSON.stringify(cartItems));
-    updateStock(bookId); // Decrease the stock
-    window.location.href = 'checkout.php';
-}

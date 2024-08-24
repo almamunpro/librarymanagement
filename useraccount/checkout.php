@@ -6,6 +6,7 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,21 +22,39 @@ if (!isset($_SESSION['username'])) {
         <!-- Cart items will be displayed here -->
     </div>
 
-    <button onclick="calculateTotal()">Done</button>
+    
 
-    <div id="totalAmountContainer" style="display: none;">
-        <!-- Total amount will be displayed here -->
+    <div id="totalAmountContainer">
+        Total Amount: $<span id="totalAmount"></span>
+        <input type="hidden" id="totalAmountHidden" name="totalAmount">
     </div>
 
     <button id="markItemsButton" onclick="toggleCheckboxes()">Mark Items</button>
-
     <button onclick="goToPayment()">Proceed to Payment</button> <!-- Payment Button -->
 
     <script src="scripts.js"></script> <!-- Include your JavaScript file -->
     <script>
+        function updateAmount() {
+            let rentalDays = document.getElementById('rentalDays').value;
+            let baseAmount = calculateBaseAmount(); // Your existing logic to calculate base amount
+            let totalAmount = rentalDays * baseAmount;
+
+            document.getElementById('totalAmount').textContent = totalAmount.toFixed(2);
+            document.getElementById('totalAmountHidden').value = totalAmount.toFixed(2);
+
+            // Store rental days and total amount in sessionStorage
+            sessionStorage.setItem('rentalDays', rentalDays);
+            sessionStorage.setItem('totalAmount', totalAmount.toFixed(2));
+        }
+
         function goToPayment() {
             window.location.href = "payment.php";
         }
+
+        // Initial calculation on page load
+        document.addEventListener("DOMContentLoaded", function() {
+            updateAmount();
+        });
     </script>
 </body>
 </html>

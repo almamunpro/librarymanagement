@@ -26,7 +26,7 @@ if (!isset($_SESSION['username'])) {
             </button>
             <div class="dropdown-content">
                 <a href="/catagories/it_and_technology.php">IT and Technology</a>
-                <a href="#">Religion</a>
+                <a href="/catagories/Religion.php">Religion</a>
                 <a href="#">History</a>
             </div>
         </div>
