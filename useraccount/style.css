@@ -1,3 +1,8 @@
+/* admin panel */
+
+
+
+/* index.php start */
 .index{  
     font-family: Arial, sans-serif;
     display: flex;
@@ -44,6 +49,8 @@
     border-radius: 10px;
 }
 
+/* index.php finished */
+/* registration */
 
 form {
     background: rgba(255, 255, 255, 0.8);
@@ -95,7 +102,7 @@ form input[type="submit"]:hover {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background-color: #f0f0f0;
+    background-color: #38eeff;
     padding: 10px;
 }
 
@@ -108,7 +115,8 @@ form input[type="submit"]:hover {
 }
 
 .navbar a:hover {
-    background-color: #ddd;
+    background-color: #30ff15;
+    border: 1px solid black;
 }
 
 .nav{
@@ -171,7 +179,9 @@ form input[type="submit"]:hover {
   }
   
   .dropdown-content a:hover {
-    background-color: #ddd;
+    background-color: #15ffc4;
+    border: 1px solid black;
+
   }
   
   .dropdown:hover .dropdown-content {
@@ -179,17 +189,23 @@ form input[type="submit"]:hover {
   }
 
   .current_page{
-    background-color: #ddd;
+    background-color: #15ffc4;
+    border: 1px solid black;
+
 }
 /* dashboard start */
 
 .dashboard_container{
     width: 20%;
     height: 20%;
-    padding-bottom: 1%;
     margin: auto;  
     text-align: center;
     color: sienna;
+    border: 4px solid rgb(255, 176, 112);
+    border-radius: 30px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background-color: white;
 }
 .dashboard_options {
     text-align: center;
@@ -228,10 +244,16 @@ BODY{
     margin: auto;
 }
 .book-cintrainer-title{
-    font-size: 20px;
+    font-size: 30px;
+    font-weight: 400;
+    width: 300px;
+    padding: 10px;
     margin-left: 4%;
     margin-top: 10px;
-    color: sienna;
+    color: rgb(0, 225, 255);
+    background-color: white;
+    border-radius: 20px;
+    text-align: center;
 }
 .book-container{
     display: flex;
@@ -242,6 +264,7 @@ BODY{
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+    margin-bottom: 30px;
 }
 .book{
     padding: 1%;
@@ -254,6 +277,7 @@ BODY{
     flex-direction: column;
     align-self: center;
     width: 200px;
+    background-color: white !important;
 }
 .book img{
     width: 100px;
@@ -399,6 +423,7 @@ BODY{
     padding: 10px;
     border: 1px solid #ccc;
     margin-bottom: 10px;
+    background-color: white;
 }
 
 .cart-item img {
@@ -532,9 +557,14 @@ img {vertical-align: middle;}
 }
 
 .slidetitle{
-    font-size: 20px;
+    font-size: 30px;
+    width: 300px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 15px;
     margin-left: 4%;
     margin-top: -27px;
+    text-align: center;
     color: sienna;
 }
 
@@ -581,6 +611,11 @@ img {vertical-align: middle;}
 .more_button{
     margin-top: 260px;
     margin-left: -30px;
+    background-color: white;
+    border: 1px solid rgb(0, 183, 255);
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 15px;
 }
 
 .payment{
@@ -613,3 +648,77 @@ img {vertical-align: middle;}
 }
 
 /* Other existing styles */
+.it{
+    background-image: url(/bg_images/it_bachgournd.jpg);
+    padding: 60px;
+    margin-bottom: 40px;
+}
+.History{
+    background-image: url(/bg_images/history.jpg);
+    padding: 60px;
+    margin-bottom: 40px;
+
+}
+.Religion{
+    background-image: url(/bg_images/religious-books.jpg);
+    padding: 60px;
+    margin-bottom: 40px;
+
+}
+.cover{
+    background-image: url(/bg_images/top_3.webp);
+    background-size: cover;
+    padding: 60px;
+    margin-bottom: 40px;
+}
+
+/* admin */
+.admin-title{
+    font-size: 34px;
+    text-align: center;
+    color: #333;
+    margin-top: 80%;
+    background-color: rgb(122, 206, 255);
+    padding: 10px 20px;
+    border-radius: 20px;
+}
+.admin-form{
+    height: auto;
+    background-color: rgb(122, 206, 255);
+    display: flex;
+    flex-direction: column;
+    margin-top: -5%;
+}
+.admin-form label{
+    margin-bottom: 10px;
+    font-weight: 400;
+    font-family: 'Courier New', Courier, monospace;
+}
+.admin{
+    background-image: url(/bg_images/Digital\ Library\ -\ Main\ Picture-1.png);
+    background-size: cover;
+    background-repeat: repeat-y;
+}
+.book-container-title{
+    font-size: 30px;
+    text-align: center;
+    color: #333;
+    margin-top: 50px;
+    background-color: rgb(122, 206, 255);
+    padding: 10px 20px;
+    border-radius: 20px;
+}
+.history{
+    background-image: url(/bg_images/History.jpg);
+}
+.more{
+    text-align: right;
+    padding: 10px 20px;
+    color: white;
+    background-color: #52baf7;
+    text-decoration: none;
+    margin-right: -20px;
+    border-radius: 5px;
+    margin-left: 93%;
+    margin-top: 30px;
+}

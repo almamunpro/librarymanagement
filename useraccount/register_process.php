@@ -1,5 +1,6 @@
 <?php
 include 'config.php';
+session_start();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];
@@ -29,13 +30,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->bind_param("sss", $username, $email, $password);
 
     if ($stmt->execute()) {
-        header("Location: index.php");
+        // Registration successful, set up session and redirect to dashboard
+        $_SESSION['username'] = $username;
+        $_SESSION['email'] = $email;
+        header("Location: dashboard.php");
         exit();
     } else {
-        echo "Error: " . $stmt->error;
+        // Handle insertion error
+        $_SESSION['error_message'] = "Error registering user. Please try again.";
+        header("Location: register.php");
+        exit();
     }
-
-    $stmt->close();
-    $conn->close();
 }
-?>

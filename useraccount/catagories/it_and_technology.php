@@ -5,15 +5,32 @@ if (!isset($_SESSION['username'])) {
     header("Location: login.php");
     exit();
 }
+
+// Database connection
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "users";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Fetch books for the 'IT and Technology' category
+$sql = "SELECT title, image_path, stock FROM product WHERE category = 'IT and Technology'";
+$result = $conn->query($sql);
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Store</title>
+    <title>IT and Technology Books</title>
     <link rel="stylesheet" href="/style.css"> <!-- Include your CSS file -->
-    <script src="https://kit.fontawesome.com/f6f145f38e.js" crossorigin="anonymous"></script>
 </head>
 <body>
 <nav class="navbar">
@@ -23,12 +40,12 @@ if (!isset($_SESSION['username'])) {
             <i class="fa fa-caret-down"></i>
             </button>
             <div class="dropdown-content">
-                <a class="current_page" href="/catagories/it_and_technology.php">IT and Technology</a>
+                <a href="/catagories/it_and_technology.php">IT and Technology</a>
                 <a href="/catagories/Religion.php">Religion</a>
                 <a href="/catagories/history.php">History</a>
             </div>
         </div>
-        <a href="/dashboard.php" >Dashboard</a>
+        <a href="/dashboard.php">Dashboard</a>
         <a href="book_type.php">Book Type</a>
         <a href="books_taken.php">Books Taken</a>
         <a href="checkout.php"><i class="fa-solid fa-cart-plus"></i> cart</a>
@@ -43,395 +60,35 @@ if (!isset($_SESSION['username'])) {
     <h1>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</h1>
 </div>
 
+<h1 class="book-container-title">IT and Technology Books</h1>
 
-
-<h1 class="book-cintrainer-title">It and Technology </h1>
 
 <div class="book-container">
-
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/books/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/books/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-
-    <a class="more_button" href="">more</a>
-
-
+    <?php
+    if ($result->num_rows > 0) {
+        // Output data of each row
+        while($row = $result->fetch_assoc()) {
+            echo '<div class="book">';
+            echo '<img src="/' . htmlspecialchars($row["image_path"]) . '" alt="' . htmlspecialchars($row["title"]) . '">'; // Ensure the correct path
+            echo '<p>' . htmlspecialchars($row["title"]) . '</p>';
+            echo '<p>Stock: <span class="stock">' . htmlspecialchars($row["stock"]) . '</span></p>';
+            echo '<div class="book-btn">';
+            echo '<button onclick="addToCart(\'' . htmlspecialchars($row["title"]) . '\', \'' . htmlspecialchars($row["image_path"]) . '\', 1)">Add to Cart</button>';
+            echo '<button onclick="buyNow(\'' . htmlspecialchars($row["title"]) . '\', \'' . htmlspecialchars($row["image_path"]) . '\', 1)">Buy</button>';
+            echo '</div></div>';
+        }
+    } else {
+        echo "No books available in this category.";
+    }
+    ?>
 </div>
 
 
-<!-- Modal Container -->
-<div id="modal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <p id="modal-message"></p>
-    </div>
-</div>
-
-<script src="scripts.js"></script> <!-- Include your JavaScript file -->
+<!-- Include your JavaScript file -->
+<script src="scripts.js"></script>
 </body>
 </html>
 
+<?php
+$conn->close();
+?>

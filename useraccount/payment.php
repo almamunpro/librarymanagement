@@ -6,7 +6,6 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,10 +29,13 @@ if (!isset($_SESSION['username'])) {
             <input type="text" id="phone" name="phone" required>
 
             <label for="rentalDays">Rental Days:</label>
-            <input type="text" id="rentalDays" name="rentalDays" readonly> <!-- Read-only -->
+            <input type="text" id="rentalDays" name="rentalDays" readonly> <!-- Read-only field -->
 
-            <label for="amount">Amount:</label>
-            <input type="text" id="totalAmount" name="totalAmount" readonly> <!-- Read-only -->
+            <label for="totalAmount">Amount:</label>
+            <input type="text" id="totalAmount" name="totalAmount" readonly> <!-- Read-only field -->
+
+            <!-- Include a hidden input for the Stripe token -->
+            <input type="hidden" name="stripeToken" id="stripeToken">
 
             <button type="submit">Submit Payment</button>
         </form>
@@ -41,15 +43,15 @@ if (!isset($_SESSION['username'])) {
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Fill the fields from sessionStorage
-            let rentalDays = sessionStorage.getItem('rentalDays');
+            // Fill the amount and calculate rentalDays
             let totalAmount = sessionStorage.getItem('totalAmount');
 
-            if (rentalDays) {
-                document.getElementById('rentalDays').value = rentalDays;
-            }
             if (totalAmount) {
                 document.getElementById('totalAmount').value = totalAmount;
+
+                // Calculate rental days as amount divided by 10
+                let rentalDays = totalAmount / 10;
+                document.getElementById('rentalDays').value = rentalDays;
             }
         });
     </script>
