@@ -34,7 +34,10 @@ $result = $conn->query($sql);
 </head>
 <body>
 <nav class="navbar">
-    <div class="navbar_left">
+    
+        <div class="navbar_left">
+        <a href="/dashboard.php">Dashboard</a>
+
         <div class="dropdown">
             <button class="dropbtn">Categories 
             <i class="fa fa-caret-down"></i>
@@ -45,7 +48,6 @@ $result = $conn->query($sql);
                 <a href="/catagories/history.php">History</a>
             </div>
         </div>
-        <a href="/dashboard.php">Dashboard</a>
         <a href="book_type.php">Book Type</a>
         <a href="books_taken.php">Books Taken</a>
         <a href="checkout.php"><i class="fa-solid fa-cart-plus"></i> cart</a>

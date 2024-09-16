@@ -25,7 +25,7 @@ if (!isset($_SESSION['username'])) {
     
 
     <div id="totalAmountContainer">
-        Total Amount: $<span id="totalAmount"></span>
+        Total Amount: <span id="totalAmount"></span>টাকা
         <input type="hidden" id="totalAmountHidden" name="totalAmount">
     </div>
 

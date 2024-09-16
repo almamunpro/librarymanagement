@@ -20,7 +20,10 @@
             <input type="text" name="username" placeholder="Username" required>
             <input type="password" name="password" placeholder="Password" required>
             <input type="submit" value="Login">
+            <p>Don't have an account? <a class="reg" href="register.php">Register here</a></p>
+            <a class="forget" href="forgot_password.php">Forgot Password?</a>
         </form>
+        
     </div>
 </body>
 </html>

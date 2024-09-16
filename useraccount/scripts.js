@@ -1,17 +1,23 @@
 // Function to add an item to the cart
-function addToCart(title, imgSrc) {
+function addToCart(title, imgSrc, rentalDays = 1) {
     let cart = JSON.parse(sessionStorage.getItem('cartItems')) || [];
-    cart.push({ title: title, imgSrc: imgSrc, rentalDays: 1 }); // Default rentalDays to 1
+    const existingItemIndex = cart.findIndex(item => item.title === title);
+
+    if (existingItemIndex > -1) {
+        cart[existingItemIndex].rentalDays += rentalDays;
+    } else {
+        cart.push({ title: title, imgSrc: imgSrc, rentalDays: rentalDays });
+    }
+
     sessionStorage.setItem('cartItems', JSON.stringify(cart));
     showModal('The book "' + title + '" has been added to your cart.');
 }
-
 
 // Function to display cart items on checkout page
 function displayCartItems() {
     const cartContainer = document.getElementById('cartContainer');
     const cartItems = JSON.parse(sessionStorage.getItem('cartItems')) || [];
-
+    
     cartContainer.innerHTML = ''; // Clear previous items
 
     cartItems.forEach((item, index) => {
@@ -40,11 +46,7 @@ function displayCartItems() {
 function generateRentalDaysOptions(selectedDays) {
     let options = '';
     for (let i = 1; i <= 30; i++) {
-        if (i === selectedDays) {
-            options += `<option value="${i}" selected>${i} day(s)</option>`;
-        } else {
-            options += `<option value="${i}">${i} day(s)</option>`;
-        }
+        options += `<option value="${i}" ${i === selectedDays ? 'selected' : ''}>${i} day(s)</option>`;
     }
     return options;
 }
@@ -66,14 +68,13 @@ function calculateTotal() {
         total += item.rentalDays * 10; // Assuming $10 per day
     });
 
-    let totalAmountContainer = document.getElementById('totalAmountContainer');
+    const totalAmountContainer = document.getElementById('totalAmountContainer');
     totalAmountContainer.style.display = 'block';
     document.getElementById('totalAmount').innerText = total;
     document.getElementById('totalAmountHidden').value = total;
 
     sessionStorage.setItem('totalAmount', total); // Store total amount in sessionStorage
 }
-
 
 // Function to remove a cart item
 function removeCartItem(index) {
@@ -85,17 +86,17 @@ function removeCartItem(index) {
 
 // Function to toggle checkboxes for marking items
 function toggleCheckboxes() {
-    let checkboxes = document.querySelectorAll('.cart-item-checkbox');
-    let markItemsButton = document.getElementById('markItemsButton');
+    const checkboxes = document.querySelectorAll('.cart-item-checkbox');
+    const markItemsButton = document.getElementById('markItemsButton');
 
     if (checkboxes[0].style.display === 'none' || checkboxes[0].style.display === '') {
-        checkboxes.forEach(function(checkbox) {
+        checkboxes.forEach(checkbox => {
             checkbox.style.display = 'block';
             checkbox.checked = false; // Unmark all items initially
         });
         markItemsButton.textContent = 'Unmark Items';
     } else {
-        checkboxes.forEach(function(checkbox) {
+        checkboxes.forEach(checkbox => {
             checkbox.style.display = 'none';
         });
         markItemsButton.textContent = 'Mark Items';
@@ -104,15 +105,15 @@ function toggleCheckboxes() {
 
 // Function to show a modal with a message
 function showModal(message) {
-    let modal = document.getElementById('modal');
-    let modalMessage = document.getElementById('modal-message');
+    const modal = document.getElementById('modal');
+    const modalMessage = document.getElementById('modal-message');
     modalMessage.textContent = message;
     modal.style.display = 'block';
 }
 
 // Function to close the modal
 function closeModal() {
-    let modal = document.getElementById('modal');
+    const modal = document.getElementById('modal');
     modal.style.display = 'none';
 }
 
@@ -121,25 +122,21 @@ document.addEventListener("DOMContentLoaded", function() {
     displayCartItems();
 });
 
-//slideshow
-
+// Slideshow
 let slideIndex = 0;
-showSlides();
-
 function showSlides() {
-  let i;
-  let slides = document.getElementsByClassName("mySlides");
-  let dots = document.getElementsByClassName("dot");
-  for (i = 0; i < slides.length; i++) {
-    slides[i].style.display = "none";  
-  }
-  slideIndex++;
-  if (slideIndex > slides.length) {slideIndex = 1}    
-  for (i = 0; i < dots.length; i++) {
-    dots[i].className = dots[i].className.replace(" active", "");
-  }
-  slides[slideIndex-1].style.display = "block";  
-  dots[slideIndex-1].className += " active";
-  setTimeout(showSlides, 2000); // Change image every 2 seconds
+    const slides = document.getElementsByClassName("mySlides");
+    const dots = document.getElementsByClassName("dot");
+    for (let i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";  
+    }
+    slideIndex++;
+    if (slideIndex > slides.length) {slideIndex = 1}    
+    for (let i = 0; i < dots.length; i++) {
+        dots[i].className = dots[i].className.replace(" active", "");
+    }
+    slides[slideIndex-1].style.display = "block";  
+    dots[slideIndex-1].className += " active";
+    setTimeout(showSlides, 2000); // Change image every 2 seconds
 }
-
+showSlides();
