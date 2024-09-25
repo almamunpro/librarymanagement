@@ -1,37 +1,58 @@
 <?php
 session_start();
-
+// Redirect if the user is not logged in
 if (!isset($_SESSION['username'])) {
     header("Location: login.php");
     exit();
 }
+include 'config.php';
+
+// Check if connection is established
+if (!$conn) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+
+// Fetch books by category
+$categories = ['IT and Technology', 'Religion', 'History'];
+$books = [];
+
+foreach ($categories as $category) {
+    $stmt = $conn->prepare("SELECT * FROM product WHERE category = ? LIMIT 5");
+    $stmt->bind_param('s', $category);
+    $stmt->execute();
+    $books[$category] = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+}
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Store</title>
-    <link rel="stylesheet" href="/style.css"> <!-- Include your CSS file -->
+    <title>Book Store Dashboard</title>
+    <link rel="stylesheet" href="/style.css">
     <script src="https://kit.fontawesome.com/f6f145f38e.js" crossorigin="anonymous"></script>
 </head>
 <body>
+
+<!-- Navbar -->
 <nav class="navbar">
     <div class="navbar_left">
-
-        <a href="/test/index.php" class="current_page">Dashboard</a>
+        <a href="/dashboard.php" class="current_page">Dashboard</a>
         <div class="dropdown">
             <button class="dropbtn">Categories
-            <i class="fa fa-caret-down"></i>
+                <i class="fa fa-caret-down"></i>
             </button>
             <div class="dropdown-content">
                 <a href="/catagories/it_and_technology.php">IT and Technology</a>
                 <a href="/catagories/Religion.php">Religion</a>
-                <a href="#">History and Culture</a>
+                <a href="/catagories/history.php">History and Culture</a>
             </div>
         </div>
-        <a href="books_taken.php">Books Taken</a>
-        <a href="checkout.php"><i class="fa-solid fa-cart-plus"></i> cart</a>
+        <a href="/rent.php">Rented Books</a>
+        <a href="checkout.php"><i class="fa-solid fa-cart-plus"></i> Cart</a>
     </div>
     <div class="navbar_right">
         <a href="edit_profile.php">Edit Profile</a>
@@ -39,211 +60,86 @@ if (!isset($_SESSION['username'])) {
     </div>
 </nav>
 
+
+<!-- Welcome Message -->
 <div class="dashboard_container">
     <h1>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</h1>
 </div>
 
-<div class="cover">
-<h1 class="slidetitle">Most Popular Books</h1>
-<div class="slideshow-container">
 
-    <div class="mySlides fade">
-        <div class="numbertext">1 / 3</div>
-        <a href=" "></a>
-        <img src="/admin/uploads/Beginning Java Programming For Dummies.jpg " style="width:100%">
+<!-- Book Categories -->
+<div class="book-sections">
+    <!-- IT and Technology Section -->
+    <div class="it">
+        <h1 class="book-container-title">IT and Technology</h1>
+        <div class="book-container">
+            <?php foreach ($books['IT and Technology'] as $book): ?>
+                <div class="book">
+                    <img src="<?php echo htmlspecialchars($book['image_path']); ?>" alt="<?php echo htmlspecialchars($book['title']); ?>">
+                    <p><?php echo htmlspecialchars($book['title']); ?></p>
+                    <p>Stock: <?php echo htmlspecialchars($book['stock']); ?></p>
+                    <?php if ($book['stock'] > 0): ?>
+                        <div class="book-btn">
+                            <button onclick="window.location.href='add_to_cart.php?id=<?php echo $book['id']; ?>&action=cart'">Add to Cart</button>
+                            <button onclick="window.location.href='add_to_cart.php?id=<?php echo $book['id']; ?>&action=rent'">Rent</button>
+                        </div>
+                    <?php else: ?>
+                        <p>Stock Out</p>
+                    <?php endif; ?>
+                </div>
+            <?php endforeach; ?>
+        </div>
+        <a class="more_button" href="/catagories/it_and_technology.php">More</a>
     </div>
 
-    <div class="mySlides fade">
-        <div class="numbertext">2 / 3</div>
-        <img src="/admin/uploads/PHP, MySQL, JavaScript & HTML5 All-In-One For Dummies.jpg" style="width:100%">
+    <!-- Religion Section -->
+    <div class="Religion">
+        <h1 class="book-container-title">Religion</h1>
+        <div class="book-container">
+            <?php foreach ($books['Religion'] as $book): ?>
+                <div class="book">
+                    <img src="<?php echo htmlspecialchars($book['image_path']); ?>" alt="<?php echo htmlspecialchars($book['title']); ?>">
+                    <p><?php echo htmlspecialchars($book['title']); ?></p>
+                    <p>Stock: <?php echo htmlspecialchars($book['stock']); ?></p>
+                    <?php if ($book['stock'] > 0): ?>
+                        <div class="book-btn">
+                            <button onclick="window.location.href='add_to_cart.php?id=<?php echo $book['id']; ?>&action=cart'">Add to Cart</button>
+                            <button onclick="window.location.href='add_to_cart.php?id=<?php echo $book['id']; ?>&action=rent'">Rent</button>
+                        </div>
+                    <?php else: ?>
+                        <p>Stock Out</p>
+                    <?php endif; ?>
+                </div>
+            <?php endforeach; ?>
+        </div>
+        <a class="more_button" href="/catagories/Religion.php">More</a>
     </div>
 
-    <div class="mySlides fade">
-        <div class="numbertext">3 / 3</div>
-        <img src="/admin/uploads/Hacking For Dummies, 3rd Edition.jpg" style="width:100%">
-    </div>
-
-</div>
-</div>
-<br>
-
-<div style="text-align:center">
-  <span class="dot"></span>
-  <span class="dot"></span>
-  <span class="dot"></span>
-</div>
-
-<div class="it">
-<h1 class="book-cintrainer-title">It and Technology </h1>
-
-<div class="book-container">
-
-<div class="book">
-    <img src="/admin/uploads/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/admin/uploads/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/admin/uploads/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/admin/uploads/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data </p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/admin/uploads/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/admin/uploads/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/admin/uploads/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/admin/uploads/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/admin/uploads/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/admin/uploads/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/admin/uploads/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/admin/uploads/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/admin/uploads/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/admin/uploads/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/admin/uploads/Data Structures with Java.jpg', 1)">Buy</button>
+    <!-- History and Culture Section -->
+    <div class="History">
+        <h1 class="book-container-title">History and Culture</h1>
+        <div class="book-container">
+            <?php foreach ($books['History'] as $book): ?>
+                <div class="book">
+                    <img src="<?php echo htmlspecialchars($book['image_path']); ?>" alt="<?php echo htmlspecialchars($book['title']); ?>">
+                    <p><?php echo htmlspecialchars($book['title']); ?></p>
+                    <p>Stock: <?php echo htmlspecialchars($book['stock']); ?></p>
+                    <?php if ($book['stock'] > 0): ?>
+                        <div class="book-btn">
+                            <button onclick="window.location.href='add_to_cart.php?id=<?php echo $book['id']; ?>&action=cart'">Add to Cart</button>
+                            <button onclick="window.location.href='add_to_cart.php?id=<?php echo $book['id']; ?>&action=rent'">Rent</button>
+                        </div>
+                    <?php else: ?>
+                        <p>Stock Out</p>
+                    <?php endif; ?>
+                </div>
+            <?php endforeach; ?>
+        </div>
+        <a class="more_button" href="/catagories/history.php">More</a>
     </div>
 </div>
 
-    <a class="more_button" href="/catagories/it_and_technology.php">more</a>
-
-
-</div>
-</div>
-<div class="History">
-<h1 class="book-cintrainer-title">History and Culture </h1>
-
-<div class="book-container">
-
-<div class="book">
-    <img src="/admin/uploads/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/admin/uploads/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/admin/uploads/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/admin/uploads/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data </p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/admin/uploads/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/admin/uploads/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/admin/uploads/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/admin/uploads/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/admin/uploads/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/admin/uploads/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/admin/uploads/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/admin/uploads/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/admin/uploads/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/admin/uploads/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/admin/uploads/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-
-    <a class="more_button" href="/catagories/history.php">more</a>
-
-
-</div>
-</div>
-<div class="Religion">
-<h1 class="book-cintrainer-title">Religion </h1>
-
-<div class="book-container">
-
-<div class="book">
-    <img src="/admin/uploads/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/admin/uploads/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/admin/uploads/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/admin/uploads/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data </p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/admin/uploads/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/admin/uploads/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/admin/uploads/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/admin/uploads/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/admin/uploads/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/admin/uploads/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/admin/uploads/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/admin/uploads/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-<div class="book">
-    <img src="/admin/uploads/Data Structures with Java.jpg" alt="Data Structures with Java">
-    <p>Data Structures with Java</p>
-    <p>Stock: <span class="stock" id="stock-1">10</span></p> <!-- Add this line for stock display -->
-    <div class="book-btn">
-        <button onclick="addToCart('Data Structures with Java', '/admin/uploads/Data Structures with Java.jpg', 1)">Add to Cart</button>
-        <button onclick="buyNow('Data Structures with Java', '/admin/uploads/Data Structures with Java.jpg', 1)">Buy</button>
-    </div>
-</div>
-
-    <a class="more_button" href="/catagories/Religion.php">more</a>
-
-
-</div>
-</div>
-
-
-<!-- Modal Container -->
+<!-- Modal -->
 <div id="modal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
@@ -251,7 +147,6 @@ if (!isset($_SESSION['username'])) {
     </div>
 </div>
 
-<script src="scripts.js"></script> <!-- Include your JavaScript file -->
+<script src="scripts.js"></script>
 </body>
 </html>
-

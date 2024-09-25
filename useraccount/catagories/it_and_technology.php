@@ -19,7 +19,7 @@ if ($conn->connect_error) {
 }
 
 // Fetch books for the 'IT and Technology' category
-$sql = "SELECT title, image_path, stock FROM product WHERE category = 'IT and Technology'";
+$sql = "SELECT id, title, image_path, stock FROM product WHERE category = 'IT and Technology'";
 $result = $conn->query($sql);
 
 ?>
@@ -34,22 +34,20 @@ $result = $conn->query($sql);
 </head>
 <body>
 <nav class="navbar">
-    
-        <div class="navbar_left">
+    <div class="navbar_left">
         <a href="/dashboard.php">Dashboard</a>
-
         <div class="dropdown">
             <button class="dropbtn">Categories 
             <i class="fa fa-caret-down"></i>
             </button>
             <div class="dropdown-content">
-                <a href="/catagories/it_and_technology.php">IT and Technology</a>
+                <a class="current_page"  href="/catagories/it_and_technology.php">IT and Technology</a>
                 <a href="/catagories/Religion.php">Religion</a>
                 <a href="/catagories/history.php">History</a>
             </div>
         </div>
         <a href="book_type.php">Book Type</a>
-        <a href="books_taken.php">Books Taken</a>
+        <a href="rent.php">Rented Books</a>
         <a href="checkout.php"><i class="fa-solid fa-cart-plus"></i> cart</a>
     </div>
     <div class="navbar_right">
@@ -64,7 +62,6 @@ $result = $conn->query($sql);
 
 <h1 class="book-container-title">IT and Technology Books</h1>
 
-
 <div class="book-container">
     <?php
     if ($result->num_rows > 0) {
@@ -75,8 +72,8 @@ $result = $conn->query($sql);
             echo '<p>' . htmlspecialchars($row["title"]) . '</p>';
             echo '<p>Stock: <span class="stock">' . htmlspecialchars($row["stock"]) . '</span></p>';
             echo '<div class="book-btn">';
-            echo '<button onclick="addToCart(\'' . htmlspecialchars($row["title"]) . '\', \'' . htmlspecialchars($row["image_path"]) . '\', 1)">Add to Cart</button>';
-            echo '<button onclick="buyNow(\'' . htmlspecialchars($row["title"]) . '\', \'' . htmlspecialchars($row["image_path"]) . '\', 1)">Buy</button>';
+            echo '<button onclick="addToCart(' . $row["id"] . ', \'' . htmlspecialchars($row["title"]) . '\', \'' . htmlspecialchars($row["image_path"]) . '\')">Add to Cart</button>';
+            echo '<button onclick="buyNow(' . $row["id"] . ', \'' . htmlspecialchars($row["title"]) . '\', \'' . htmlspecialchars($row["image_path"]) . '\')">Buy</button>';
             echo '</div></div>';
         }
     } else {
@@ -85,9 +82,8 @@ $result = $conn->query($sql);
     ?>
 </div>
 
-
 <!-- Include your JavaScript file -->
-<script src="scripts.js"></script>
+<script src="/scripts.js"></script>
 </body>
 </html>
 

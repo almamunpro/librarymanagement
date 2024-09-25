@@ -35,6 +35,8 @@ $result = $conn->query($sql);
 <body class="history">
 <nav class="navbar">
     <div class="navbar_left">
+        
+        <a href="/dashboard.php">Dashboard</a>
         <div class="dropdown">
             <button class="dropbtn">Categories 
             <i class="fa fa-caret-down"></i>
@@ -42,13 +44,11 @@ $result = $conn->query($sql);
             <div class="dropdown-content">
                 <a href="/catagories/it_and_technology.php">IT and Technology</a>
                 <a href="/catagories/Religion.php">Religion</a>
-                <a href="/catagories/history.php">History</a>
+                <a class="current_page" href="/catagories/history.php">History</a>
             </div>
         </div>
-        <a href="/dashboard.php">Dashboard</a>
-        <a href="book_type.php">Book Type</a>
-        <a href="books_taken.php">Books Taken</a>
-        <a href="checkout.php"><i class="fa-solid fa-cart-plus"></i> cart</a>
+        <a href="/rent.php">Rented Books</a>
+        <a href="/checkout.php"><i class="fa-solid fa-cart-plus"></i> cart</a>
     </div>
     <div class="navbar_right">
         <a href="edit_profile.php">Edit Profile</a>

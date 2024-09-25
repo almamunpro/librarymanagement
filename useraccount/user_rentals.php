@@ -1,10 +1,7 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['username']) || $_SESSION['username'] !== 'admin') {
-    echo 'Unauthorized access.';
-    exit();
-}
+
 
 // Database connection
 $servername = "localhost";
@@ -18,7 +15,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT username, book_title, rental_date, due_date FROM rentals";
+$sql = "SELECT username, rented_books_id,	book_id,	title,	rental_days,	created_at	 FROM rented_book_items";
 $result = $conn->query($sql);
 
 ?>

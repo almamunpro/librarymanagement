@@ -1,82 +1,46 @@
-
 <?php
 session_start();
+include 'config.php';
 
+// Ensure user is logged in
 if (!isset($_SESSION['username'])) {
     header("Location: login.php");
     exit();
 }
 
-require 'vendor/autoload.php'; // Ensure you have included Composer's autoload file
-\Stripe\Stripe::setApiKey('YOUR_SECRET_KEY');
+$username = $_SESSION['username'];
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "users";
+// Retrieve total amount and rental days from the POST request
+$totalAmount = $_POST['totalAmount'];
+$rentalDays = $_POST['rentalDays'];
+$deliveryMethod = $_POST['deliveryMethod'];
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+// Get cart items for this user
+$stmt = $conn->prepare("SELECT * FROM cart WHERE username = ?");
+$stmt->bind_param('s', $username);
+$stmt->execute();
+$result = $stmt->get_result();
+$cart_items = $result->fetch_all(MYSQLI_ASSOC);
+$stmt->close();
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+// Insert rented items into the rented_books table and decrease stock
+foreach ($cart_items as $item) {
+    // Insert into rented_books
+    $stmt = $conn->prepare("INSERT INTO rented_books (username, product_id, title, rental_days, price, image_path) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param('sisids', $username, $item['product_id'], $item['title'], $rentalDays, $item['price'], $item['image_path']);
+    $stmt->execute();
+
+    // Decrease stock in the product table
+    $stmt = $conn->prepare("UPDATE product SET stock = stock - 1 WHERE id = ?");
+    $stmt->bind_param('i', $item['product_id']);
+    $stmt->execute();
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_SESSION['username'];
-    $name = htmlspecialchars(trim($_POST['name']), ENT_QUOTES, 'UTF-8');
-    $address = htmlspecialchars(trim($_POST['address']), ENT_QUOTES, 'UTF-8');
-    $phone = htmlspecialchars(trim($_POST['phone']), ENT_QUOTES, 'UTF-8');
-    $amount = $_POST['totalAmount']; // The amount is now passed as 'totalAmount'
+// Clear the cart after payment
+$stmt = $conn->prepare("DELETE FROM cart WHERE username = ?");
+$stmt->bind_param('s', $username);
+$stmt->execute();
 
-    $token = $_POST['stripeToken'];
-    $cartItems = json_decode($_POST['cartItems'], true); // Assuming cartItems are sent as JSON string
-
-    // Calculate rental days based on the amount (e.g., $10 per day)
-    $rentalDays = $amount / 10;
-
-    // Validate inputs
-    if (empty($name) || empty($address) || empty($phone) || empty($amount)) {
-        die('Please complete all required fields.');
-    }
-
-    if (!preg_match('/^[0-9]{10,15}$/', $phone)) {
-        die('Please enter a valid phone number.');
-    }
-
-    try {
-        // Process payment through Stripe
-        $charge = \Stripe\Charge::create([
-            'amount' => $amount * 100, // Amount in cents
-            'currency' => 'usd',
-            'description' => 'Book Rental Payment',
-            'source' => $token,
-        ]);
-
-        // Insert order into the orders table
-        $stmt = $conn->prepare("INSERT INTO orders (username, name, address, phone, amount, rentalDays) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssdi", $username, $name, $address, $phone, $amount, $rentalDays);
-        $stmt->execute();
-        $order_id = $stmt->insert_id;
-        $stmt->close();
-
-        // Insert each cart item into the order_items table
-        $stmt = $conn->prepare("INSERT INTO order_items (order_id, title, imgSrc, rentalDays) VALUES (?, ?, ?, ?)");
-        foreach ($cartItems as $item) {
-            $stmt->bind_param("isss", $order_id, $item['title'], $item['imgSrc'], $rentalDays);
-            $stmt->execute();
-        }
-        $stmt->close();
-
-        // Clear the cart after order is placed
-        echo "<script>sessionStorage.removeItem('cartItems');</script>";
-
-        // Redirect to a success page
-        header("Location: success.php");
-        exit();
-    } catch (\Stripe\Exception\ApiErrorException $e) {
-        echo 'Error: ' . $e->getMessage();
-    }
-}
-
-$conn->close();
+header('Location: rent.php'); // Redirect to the rent page
+exit();
 ?>
