@@ -35,7 +35,7 @@ $rentalDays = $totalAmount / 10; // Assuming the cost per day is $10
     <title>Payment</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="checkout">
 <nav class="navbar">
     <div class="navbar_left">
         <a href="/test/index.php" class="current_page">Dashboard</a>
@@ -58,9 +58,13 @@ $rentalDays = $totalAmount / 10; // Assuming the cost per day is $10
     </div>
 </nav>
 
+<div class="flex">
+            <h1>Payment</h1>
+            <h1>Total Books: <strong><?php echo $totalBooks; ?></strong></h1> <!-- Display total books -->
+        </div>
+
     <div class="paymentContainer"> 
-        <h1>Payment</h1>
-        <p>Total Books: <strong><?php echo $totalBooks; ?></strong></p> <!-- Display total books -->
+        
 
         <form id="payment-form" action="process_payment.php" method="post">
             <label for="name">Name:</label>
@@ -84,7 +88,7 @@ $rentalDays = $totalAmount / 10; // Assuming the cost per day is $10
                 <option value="online">Online Delivery (+$60)</option>
             </select>
 
-            <button type="submit">Confirm Payment</button>
+            <button class="btn" type="submit">Confirm Payment</button>
         </form>
     </div>
 

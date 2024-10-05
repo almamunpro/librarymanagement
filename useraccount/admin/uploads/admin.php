@@ -37,6 +37,7 @@
             
             <input type="submit" value="Add Book">
         </form>
+        <a href="/admin/uploads/booklist.php">book list</a>
     </div>
 </body>
 </html>

@@ -13,7 +13,7 @@
         <div class="login-registration-button">
             <a href="/register.php">Register</a>
             <a href="login.php">Login</a>
-            <a href="/admin/uploads/admin.php">admin</a>
+            <a href="/admin_log_reg.php">admin</a>
         </div>
     </div>
 </body>

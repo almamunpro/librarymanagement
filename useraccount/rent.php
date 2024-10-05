@@ -55,7 +55,7 @@ $stmt->close();
 
 <nav class="navbar">
     <div class="navbar_left">
-        <a href="/test/index.php">Dashboard</a>
+        <a href="/dashboard.php">Dashboard</a>
         <div class="dropdown">
             <button class="dropbtn">Categories
                 <i class="fa fa-caret-down"></i>

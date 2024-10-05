@@ -759,3 +759,31 @@ img {vertical-align: middle;}
     padding: 10px 20px;
     border-radius: 20px;
 }
+.checkout{
+    background-image: url(/bg_images/photo-1554120013-4ba50c1a1788.jpeg);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.flex{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+.flex h1{
+    color: #148d93;
+    border: 2px #16d8df solid;
+    padding: 10px 20px;
+    border-radius: 15px;
+    background: #ffffff;
+}
+.btn{
+    background-color: #16d8df;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-left: 25%;
+}

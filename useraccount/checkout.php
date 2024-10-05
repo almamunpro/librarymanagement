@@ -19,12 +19,12 @@ $cart_items = $result->fetch_all(MYSQLI_ASSOC);
 $stmt->close();
 
 
-echo '<pre>';
-print_r($cart_items);
-echo '</pre>';
+//  echo '<pre>';
+//  print_r($cart_items);
+//  echo '</pre>';
 
-    print_r($cart_items);// Check if this prints the full array
-    echo calculateInitialTotal($cart_items);
+//     print_r($cart_items);// Check if this prints the full array
+//     echo calculateInitialTotal($cart_items);
     
 
 // Helper function to calculate the initial total amount based on cart items
@@ -109,7 +109,7 @@ function calculateInitialTotal($cartItems) {
             font-weight: bold;
         }
 
-        button {
+        .day-controls button {
             margin-top: 10px;
             padding: 10px 15px;
             background-color: #008CBA;
@@ -122,9 +122,38 @@ function calculateInitialTotal($cartItems) {
         button:hover {
             background-color: #005f6a;
         }
+        .checkout{
+            background-image: url(/bg_images/photo-1554120013-4ba50c1a1788.jpeg);
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        .payment_btn{
+            margin-top: 20px;
+            padding: 20px 30px;
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 60px;
+            font-size: 20px;
+        }
+        .payment-submit{
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            font-size: 38px;
+            font-family: serif;
+            font-weight: 600;
+        }
+        .cart-title{
+            border:solid 1px black;
+            padding: 10px 20px;
+            border-radius: 15px;
+        }
     </style>
 </head>
-<body>
+<body class="checkout">
 <nav class="navbar">
     <div class="navbar_left">
         <a href="/dashboard.php" >Dashboard</a>
@@ -147,7 +176,10 @@ function calculateInitialTotal($cartItems) {
     </div>
 </nav>
 
-    <h1>Checkout</h1>
+    <div class="payment-submit">
+        <div class="cart-title">Cart Item:</div>
+        <button class="payment_btn" onclick="goToPayment()">Proceed to Payment</button>
+    </div>
 
     <div class="cart-container">
         <?php if (empty($cart_items)): ?>
@@ -172,13 +204,12 @@ function calculateInitialTotal($cartItems) {
             </div>
 
             <!-- Display Total Amount -->
-            <div id="totalAmountContainer">
+            <!-- <div id="totalAmountContainer">
                 Total Amount: <span id="totalAmount"><?php echo calculateInitialTotal($cart_items); ?></span> টাকা
                 <input type="hidden" id="totalAmountHidden" name="totalAmount" value="<?php echo calculateInitialTotal($cart_items); ?>">
-            </div>
+            </div> -->
 
             <!-- Proceed to Payment Button -->
-            <button onclick="goToPayment()">Proceed to Payment</button>
         <?php endif; ?>
     </div>
 
