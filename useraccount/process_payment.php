@@ -41,6 +41,6 @@ $stmt = $conn->prepare("DELETE FROM cart WHERE username = ?");
 $stmt->bind_param('s', $username);
 $stmt->execute();
 
-header('Location: rent.php'); // Redirect to the rent page
+header('Location: thank_you.php'); // Redirect to the rent page
 exit();
 ?>

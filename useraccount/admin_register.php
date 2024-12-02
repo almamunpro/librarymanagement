@@ -24,6 +24,7 @@ session_start(); // Start session to access error messages
             
             <input type="text" name="username" placeholder="Username" required>
             <input type="email" name="email" placeholder="Email" required>
+            <input type="text" name="id" placeholder="id" required>
             <input type="password" name="password" placeholder="Password" required>
             <input type="submit" value="Register">
             

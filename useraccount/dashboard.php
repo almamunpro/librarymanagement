@@ -53,6 +53,7 @@ foreach ($categories as $category) {
         </div>
         <a href="/rent.php">Rented Books</a>
         <a href="checkout.php"><i class="fa-solid fa-cart-plus"></i> Cart</a>
+        <a href="/video_section.php">Video Section</a>
     </div>
     <div class="navbar_right">
         <a href="edit_profile.php">Edit Profile</a>

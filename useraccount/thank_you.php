@@ -7,8 +7,10 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Thank You for Your Payment!</h1>
-    <p>Your payment has been successfully processed. You will receive an email confirmation shortly.</p>
-    <a href="dashboard.php">Go back to Dashboard</a>
+    <div class="tq">
+        <h1>Thank You for Your Order!</h1>
+        <p>Your Order has been successfully processed. You will receive an email confirmation shortly.</p>
+        <a href="dashboard.php">Go back to Dashboard</a>
+    </div>
 </body>
 </html>

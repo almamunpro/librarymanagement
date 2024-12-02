@@ -18,37 +18,23 @@ $result = $stmt->get_result();
 $cart_items = $result->fetch_all(MYSQLI_ASSOC);
 $stmt->close();
 
-
-//  echo '<pre>';
-//  print_r($cart_items);
-//  echo '</pre>';
-
-//     print_r($cart_items);// Check if this prints the full array
-//     echo calculateInitialTotal($cart_items);
-    
-
 // Helper function to calculate the initial total amount based on cart items
 function calculateInitialTotal($cartItems) {
     $total = 0;
 
     foreach ($cartItems as $item) {
-        // Ensure price and rental_days are set and numeric
         if (isset($item['price']) && isset($item['rental_days'])) {
-            $price = is_numeric($item['price']) ? (float)$item['price'] : 0; // Ensure price is numeric
-            $rentalDays = is_numeric($item['rental_days']) ? (int)$item['rental_days'] : 0; // Ensure rental_days is numeric
-            
-            // Use max(1, rental_days) to ensure at least one day is charged
-            $total += $price * max(1, $rentalDays); 
+            $price = is_numeric($item['price']) ? (float)$item['price'] : 0;
+            $rentalDays = is_numeric($item['rental_days']) ? (int)$item['rental_days'] : 0;
+
+            $total += $price * max(1, $rentalDays);
         } else {
-            // Log error if price or rental_days is missing
-            error_log("Missing price or rental_days for item: " . json_encode($item)); 
+            error_log("Missing price or rental_days for item: " . json_encode($item));
         }
     }
 
-    // Return total formatted to two decimal places
     return number_format($total, 2);
 }
-
 
 ?>
 
@@ -122,12 +108,14 @@ function calculateInitialTotal($cartItems) {
         button:hover {
             background-color: #005f6a;
         }
-        .checkout{
+
+        .checkout {
             background-image: url(/bg_images/photo-1554120013-4ba50c1a1788.jpeg);
             background-repeat: no-repeat;
             background-size: cover;
         }
-        .payment_btn{
+
+        .payment_btn {
             margin-top: 20px;
             padding: 20px 30px;
             background-color: #008CBA;
@@ -138,7 +126,8 @@ function calculateInitialTotal($cartItems) {
             margin-bottom: 60px;
             font-size: 20px;
         }
-        .payment-submit{
+
+        .payment-submit {
             display: flex;
             align-items: center;
             justify-content: space-around;
@@ -146,8 +135,9 @@ function calculateInitialTotal($cartItems) {
             font-family: serif;
             font-weight: 600;
         }
-        .cart-title{
-            border:solid 1px black;
+
+        .cart-title {
+            border: solid 1px black;
             padding: 10px 20px;
             border-radius: 15px;
         }
@@ -156,7 +146,7 @@ function calculateInitialTotal($cartItems) {
 <body class="checkout">
 <nav class="navbar">
     <div class="navbar_left">
-        <a href="/dashboard.php" >Dashboard</a>
+        <a href="/dashboard.php">Dashboard</a>
         <div class="dropdown">
             <button class="dropbtn">Categories
                 <i class="fa fa-caret-down"></i>
@@ -176,91 +166,87 @@ function calculateInitialTotal($cartItems) {
     </div>
 </nav>
 
-    <div class="payment-submit">
-        <div class="cart-title">Cart Item:</div>
-        <button class="payment_btn" onclick="goToPayment()">Proceed to Payment</button>
-    </div>
+<div class="payment-submit">
+    <div class="cart-title">Cart Item:</div>
+    <button class="payment_btn" onclick="goToPayment()">Proceed to Payment</button>
+</div>
 
-    <div class="cart-container">
-        <?php if (empty($cart_items)): ?>
-            <p>Your cart is empty.</p>
-        <?php else: ?>
-            <div class="book-list">
-                <?php foreach ($cart_items as $item): ?>
-                    <div class="book-item">
-                        <img src="<?php echo htmlspecialchars($item['image_path']); ?>" alt="<?php echo htmlspecialchars($item['title']); ?>">
-                        <div class="book-details">
-                            <p><?php echo htmlspecialchars($item['title']); ?></p>
-                            <p>Price: ৳<?php echo htmlspecialchars($item['price']); ?> per day</p>
-                            <label for="rentalDays_<?php echo $item['id']; ?>">Rental Days:</label>
-                            <div class="day-controls">
-                                <button type="button" onclick="updateDays(<?php echo $item['id']; ?>, -1)">-</button>
-                                <input type="number" id="rentalDays_<?php echo $item['id']; ?>" value="<?php echo max(1, $item['rental_days']); ?>" min="1" onchange="updateAmount()">
-                                <button type="button" onclick="updateDays(<?php echo $item['id']; ?>, 1)">+</button>
-                            </div>
+<div class="cart-container">
+    <?php if (empty($cart_items)): ?>
+        <p>Your cart is empty.</p>
+    <?php else: ?>
+        <div class="book-list">
+            <?php foreach ($cart_items as $item): ?>
+                <div class="book-item">
+                    <img src="<?php echo htmlspecialchars($item['image_path']); ?>" alt="<?php echo htmlspecialchars($item['title']); ?>">
+                    <div class="book-details">
+                        <p><?php echo htmlspecialchars($item['title']); ?></p>
+                        <p>Price: ৳<?php echo htmlspecialchars($item['price']); ?> per day</p>
+                        <label for="rentalDays_<?php echo $item['id']; ?>">Rental Days:</label>
+                        <div class="day-controls">
+                            <button type="button" onclick="updateDays(<?php echo $item['id']; ?>, -1)">-</button>
+                            <input type="number" id="rentalDays_<?php echo $item['id']; ?>" value="<?php echo max(1, $item['rental_days']); ?>" min="1" onchange="updateAmount()">
+                            <button type="button" onclick="updateDays(<?php echo $item['id']; ?>, 1)">+</button>
                         </div>
                     </div>
-                <?php endforeach; ?>
-            </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
 
-            <!-- Display Total Amount -->
-            <!-- <div id="totalAmountContainer">
-                Total Amount: <span id="totalAmount"><?php echo calculateInitialTotal($cart_items); ?></span> টাকা
-                <input type="hidden" id="totalAmountHidden" name="totalAmount" value="<?php echo calculateInitialTotal($cart_items); ?>">
-            </div> -->
+        <!-- Display Total Amount -->
+        <div id="totalAmountContainer">
+            Total Amount: <span id="totalAmount"><?php echo calculateInitialTotal($cart_items); ?></span> টাকা
+            <input type="hidden" id="totalAmountHidden" name="totalAmount" value="<?php echo calculateInitialTotal($cart_items); ?>">
+        </div>
+    <?php endif; ?>
+</div>
 
-            <!-- Proceed to Payment Button -->
-        <?php endif; ?>
-    </div>
+<script>
+    // Function to calculate the total amount based on user input
+    function calculateTotalAmount() {
+        let totalAmount = 0;
 
-    <script>
-        // Function to calculate the total amount based on user input
-        function calculateTotalAmount() {
-            let totalAmount = 0;
+        // Iterate over each book item in the cart
+        document.querySelectorAll('.book-item').forEach(function (bookItem, index) {
+            let rentalDays = parseInt(document.getElementById('rentalDays_' + index).value);
+            let price = parseFloat(<?php echo json_encode(array_column($cart_items, 'price')); ?>[index]);
 
-            // Iterate over each book item in the cart
-            document.querySelectorAll('.book-item').forEach(function(bookItem) {
-                let bookId = bookItem.querySelector('input[type="number"]').id.split('_')[1];
-                let rentalDays = parseInt(document.getElementById('rentalDays_' + bookId).value);
-                let price = parseFloat(<?php echo json_encode(array_column($cart_items, 'price')); ?>[bookId]); // Fetch price for the corresponding book ID
-                
-                // Check if price is a valid number
-                if (!isNaN(price) && rentalDays > 0) {
-                    totalAmount += price * rentalDays; // Calculate the total amount for each item
-                }
-            });
-
-            return totalAmount; // Return the total amount
-        }
-
-        // Function to update the total amount displayed
-        function updateAmount() {
-            let totalAmount = calculateTotalAmount(); // Calculate total amount
-            document.getElementById('totalAmount').textContent = totalAmount.toFixed(2); // Display total amount
-            document.getElementById('totalAmountHidden').value = totalAmount.toFixed(2); // Store total amount in hidden input
-        }
-
-        // Function to update the rental days
-        function updateDays(bookId, change) {
-            let input = document.getElementById('rentalDays_' + bookId);
-            let currentValue = parseInt(input.value);
-            let newValue = currentValue + change;
-
-            if (newValue >= 1) {
-                input.value = newValue;
-                updateAmount(); // Update the total amount whenever days are adjusted
+            if (!isNaN(price) && rentalDays > 0) {
+                totalAmount += price * rentalDays;
             }
-        }
-
-        // Function to proceed to the payment page
-        function goToPayment() {
-            window.location.href = "payment.php"; // Redirect to payment page
-        }
-
-        // Initial calculation on page load
-        document.addEventListener("DOMContentLoaded", function() {
-            updateAmount(); // Calculate and display total amount on page load
         });
-    </script>
+
+        return totalAmount;
+    }
+
+    // Function to update the total amount displayed
+    function updateAmount() {
+        let totalAmount = calculateTotalAmount();
+        document.getElementById('totalAmount').textContent = totalAmount.toFixed(2);
+        document.getElementById('totalAmountHidden').value = totalAmount.toFixed(2);
+    }
+
+    // Function to update the rental days
+    function updateDays(bookId, change) {
+        let input = document.getElementById('rentalDays_' + bookId);
+        let currentValue = parseInt(input.value);
+        let newValue = currentValue + change;
+
+        if (newValue >= 1) {
+            input.value = newValue;
+            updateAmount(); // Update the total amount whenever days are adjusted
+        }
+    }
+
+    // Function to proceed to the payment page
+    function goToPayment() {
+        window.location.href = "payment.php"; // Redirect to payment page
+    }
+
+    // Initial calculation on page load
+    document.addEventListener("DOMContentLoaded", function () {
+        updateAmount(); // Calculate and display total amount on page load
+    });
+</script>
 </body>
 </html>

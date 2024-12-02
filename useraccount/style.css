@@ -787,3 +787,42 @@ img {vertical-align: middle;}
     margin-top: 20px;
     margin-left: 25%;
 }
+.tq{
+    margin-top: 10%;
+    padding: 70px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #16d8df;
+}
+.video_container video{
+    width: 500px;
+    height: 315px;
+    padding-top: 30px;
+}
+.videos{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+.related_videos{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-top: 30px;
+}
+.related_video img{
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+}
+.video_container h1{
+    font-size: 30px;
+    color: #333;
+    margin-top: 50px;
+    padding: 10px 20px;
+}
